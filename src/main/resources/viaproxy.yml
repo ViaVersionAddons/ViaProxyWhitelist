@@ -1,0 +1,5 @@
+name: "Whitelist"
+version: "${version}"
+author: "Lenni0451"
+main: "net.lenni0451.whitelist.Main"
+min-version: "3.3.4"

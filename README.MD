@@ -1,27 +1,24 @@
-# Gradle Template
-A template project for my gradle based repos.
+# ViaProxyWhitelist
+Only allow specified players to join the ViaProxy server.
 
-## Maven Server Setup
-To use the maven servers in this template you need to enter your credentials into your `gradle.properties` files.\
-The file can be found in the `.gradle` folder in your home directory (create it if it doesn't exist).
-```properties
-reposiliteUsername=user
-reposilitePassword=123456
+## Usage
+### Installation
+Download the latest release from the [releases page](https://github.com/ViaVersionAddons/ViaProxyWhitelist/releases) and place it in the `plugins` folder of the ViaProxy server.\
+The minimum required version of ViaProxy is `3.3.4`.
 
-ossrhUsername=user
-ossrhPassword=123456
-```
+### Configuration
+You must enable the `proxy-online-mode` option in the config!\
+The plugin does not work without this option enabled.
 
-## Signing Setup
-To sign your artifacts you need to enter your signing credentials into your `gradle.properties` files.\
-The file can be found in the `.gradle` folder in your home directory (create it if it doesn't exist).
-```properties
-signing.keyId=ABC12345
-signing.password=123456
-signing.secretKeyRingFile=secretkey.gpg
-```
+After starting the server with the plugin, a `whitelist.yml` file will be created in the server folder.\
+It contains the kick message and the list of players that are allowed to join the server.
 
-The secretkey can be exported using the `gpg` command:
-```bash
-gpg --export-secret-key > secretkey.gpg
+```yaml
+#The message that will be displayed when a player is not whitelisted
+KickMessage: You are not whitelisted on this server!
+
+#The list of players that are allowed to join the server
+Whitelist:
+- Player1
+- Player2
 ```
