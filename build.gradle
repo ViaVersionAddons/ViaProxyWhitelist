@@ -1,48 +1,41 @@
 plugins {
-    id "java"
-    id "checkstyle"
-}
-
-base {
-    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-    compileJava.options.encoding = compileTestJava.options.encoding = javadoc.options.encoding = "UTF-8"
-
-    archivesName = project.maven_name ?: rootProject.maven_name
-    group = project.maven_group ?: rootProject.maven_group
-    version = project.maven_version ?: rootProject.maven_version
+    id "java-library"
+    id "base.java"
+    id "base.checkstyle"
+    id "configuration.include"
+    id "idea.exclude_run_dir"
+    id "viaproxy.run-with-viaproxy-task"
+    id "extra.fill_build_constants"
+    alias libs.plugins.classTokenReplacer
 }
 
 repositories {
-    mavenCentral()
     maven {
         name = "viaversion"
-        url = "https://repo.viaversion.com/everything"
+        url = "https://repo.viaversion.com"
     }
 }
 
 dependencies {
-    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
-    compileOnly "org.jetbrains:annotations:26.0.2"
-    compileOnly(annotationProcessor("org.projectlombok:lombok:1.18.38"))
-    compileOnly "net.raphimc:ViaProxy:3.4.5-SNAPSHOT"
+    compileOnly libs.viaproxy
+
+    compileOnly libs.findbugs
+    compileOnly libs.jetbrainsAnnotations
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
 }
 
 processResources {
+    var projectMavenVersion = project.maven_version
+
     //Config file: "version: ${version}"
     inputs.properties(
-            "version": project.maven_version
+            "version": projectMavenVersion
     )
 
     filesMatching("viaproxy.yml") {
         expand(
-                "version": project.maven_version
+                "version": projectMavenVersion
         )
     }
 }
-
-checkstyle {
-    toolVersion = "10.16.0" //Latest version for Java 8: 9.3
-    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
-}
-
-build.dependsOn(check)
